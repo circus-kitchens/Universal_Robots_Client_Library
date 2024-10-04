@@ -184,6 +184,12 @@ bool DashboardClient::waitForReply(const std::string& command, const std::string
   std::chrono::duration<double> time_done(0);
   std::string response;
 
+  timeval configured_tv = getConfiguredReceiveTimeout();
+  timeval tv;
+  tv.tv_sec = 15.0;
+  tv.tv_usec = 0;
+  TCPSocket::setReceiveTimeout(tv);
+
   while (time_done < timeout)
   {
     // Send the request
@@ -192,6 +198,8 @@ bool DashboardClient::waitForReply(const std::string& command, const std::string
     // Check if the response was as expected
     if (std::regex_match(response, std::regex(expected)))
     {
+      // Reset read timeout to configured socket timeout
+      TCPSocket::setReceiveTimeout(configured_tv);
       return true;
     }
 
