@@ -199,7 +199,7 @@ bool DashboardClient::waitForReply(const std::string& command, const std::string
     if (std::regex_match(response, std::regex(expected)))
     {
       // Reset read timeout to configured socket timeout
-      TCPSocket::setReceiveTimeout(configured_tv);
+      // TCPSocket::setReceiveTimeout(configured_tv);
       return true;
     }
 
